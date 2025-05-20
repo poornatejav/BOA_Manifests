@@ -21,6 +21,8 @@ metadata:
     team: frontend
     tier: web
   name: frontend
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
 spec:
   ports:
     - name: http
@@ -69,7 +71,7 @@ spec:
             - name: PORT
               value: "8080"
             - name: ENABLE_TRACING
-              value: "true"
+              value: "false"
             - name: SCHEME
               value: http
             - name: LOG_LEVEL
