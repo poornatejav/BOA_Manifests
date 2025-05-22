@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: unified-ingress
+  namespace: default  # Ingress can be created in any namespace, here we use default
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /argocd(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: argocd-server
+                namespace: argocd
+                port:
+                  number: 80
+          - path: /prometheus(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: kube-prometheus-stack-prometheus
+                namespace: monitoring
+                port:
+                  number: 9090
+          - path: /app(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                namespace: default
+                port:
+                  number: 80
